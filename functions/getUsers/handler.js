@@ -6,8 +6,8 @@ if (process.env.IS_OFFLINE) {
     dynamodbClientParams = {
         region: 'localhost',
         endpoint: 'http://localhost:8000',
-        accessKeyId: 'dummy',  // needed if you don't have aws credentials at all in env
-        secretAccessKey: 'dummy' // needed if you don't have aws credentials at all in env
+        accessKeyId: 'dummy',
+        secretAccessKey: 'dummy'
     }
 }
 
@@ -32,22 +32,6 @@ const getUsers = async (event, context) => {
 
 };
 
-const getAllUsers = async (event, context) => {
-
-    const params = {
-        TableName: 'usersTable',
-    };
-
-    const res = await dynamodb.scan(params).promise();
-    console.log(res);
-    return {
-        statusCode: 200,
-        body: JSON.stringify(res.Items), 
-    };
-
-};
-
 module.exports = {
-    getUsers,
-    getAllUsers
+    getUsers
 }

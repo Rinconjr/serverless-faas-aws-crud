@@ -17,11 +17,8 @@ plugins:
 package:
   individually: true
   patterns:
-    - '!node_modules'
-    - 'node_modules/@aws-sdk/**'
+    - '!*/**'
     - 'node_modules/uuid/**'
-    - '!package-lock.json'
-
 
 custom:
   dynamodb:
@@ -34,31 +31,46 @@ custom:
 
 functions:
   get-users:
-    handler: getUsers/handler.getUsers
+    handler: functions/getUsers/handler.getUsers
+    package:
+      patterns:
+        - 'functions/getUsers/handler.js'
     events:
       - http:
           path: users/{id}
           method: GET
   get-all-users:
-    handler: getUsers/handler.getAllUsers
+    handler: functions/getAllUsers/handler.getAllUsers
+    package:
+      patterns:
+        - 'functions/getAllUsers/handler.js'
     events:
       - http:
-          path: users
+          path: users/all
           method: GET
   create-users:
-    handler: createUsers/handler.createUsers
+    handler: functions/createUsers/handler.createUsers
+    package:
+      patterns:
+        - 'functions/createUsers/handler.js'
     events:
       - http:
           path: users
           method: POST
   update-users:
-    handler: updateUsers/handler.updateUsers
+    handler: functions/updateUsers/handler.updateUsers
+    package:
+      patterns:
+        - 'functions/updateUsers/handler.js'
     events:
       - http:
           path: users/{id}
           method: PATCH
   delete-users:
-    handler: deleteUsers/handler.deleteUsers
+    handler: functions/deleteUsers/handler.deleteUsers
+    package:
+      patterns:
+        - 'functions/deleteUsers/handler.py'
     runtime: python3.8
     events:
       - http:

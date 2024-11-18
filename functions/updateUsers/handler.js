@@ -6,8 +6,8 @@ if (process.env.IS_OFFLINE) {
     dynamodbClientParams = {
         region: 'localhost',
         endpoint: 'http://localhost:8000',
-        accessKeyId: 'dummy',  // needed if you don't have aws credentials at all in env
-        secretAccessKey: 'dummy' // needed if you don't have aws credentials at all in env
+        accessKeyId: 'dummy',
+        secretAccessKey: 'dummy'
     }
 }
 
