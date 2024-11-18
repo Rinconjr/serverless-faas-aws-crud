@@ -1,0 +1,82 @@
+service: crud-users
+
+provider:
+  name: aws
+  runtime: nodejs16.x
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action: "dynamodb:*"
+          Resource: { "Fn::GetAtt": ["usersTable", "Arn"] }
+
+plugins:
+  - serverless-offline
+  - serverless-dynamodb
+
+package:
+  individually: true
+  patterns:
+    - '!node_modules'
+    - 'node_modules/@aws-sdk/**'
+    - 'node_modules/uuid/**'
+    - '!package-lock.json'
+
+
+custom:
+  dynamodb:
+    stages:
+      - dev
+    start:
+      port: 8000
+      inMemory: true
+      migrate: true
+
+functions:
+  get-users:
+    handler: getUsers/handler.getUsers
+    events:
+      - http:
+          path: users/{id}
+          method: GET
+  get-all-users:
+    handler: getUsers/handler.getAllUsers
+    events:
+      - http:
+          path: users
+          method: GET
+  create-users:
+    handler: createUsers/handler.createUsers
+    events:
+      - http:
+          path: users
+          method: POST
+  update-users:
+    handler: updateUsers/handler.updateUsers
+    events:
+      - http:
+          path: users/{id}
+          method: PATCH
+  delete-users:
+    handler: deleteUsers/handler.deleteUsers
+    runtime: python3.8
+    events:
+      - http:
+          path: users/{id}
+          method: DELETE
+
+resources:
+  Resources:
+    usersTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: usersTable
+        AttributeDefinitions:
+          - AttributeName: pk
+            AttributeType: S
+        KeySchema:
+          - AttributeName: pk
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
